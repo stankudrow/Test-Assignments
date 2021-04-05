@@ -11,4 +11,4 @@ Some of the assignments may or have been used by companies as test assignments. 
 
 2) on whose account no official agreements were signed and that were not paid;
 
-3) which status prohibits publication in a legal way.
+3) which status does not prohibit publication in a legal way.
