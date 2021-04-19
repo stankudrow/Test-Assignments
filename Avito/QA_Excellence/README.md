@@ -1,4 +1,13 @@
-# Предисловие
+# Описание
+
+Задание на должность QA (quality assurance) инженера.
+
+* https://github.com/Hexlet/ru-test-assignments
+
+* https://github.com/avito-tech/qa-into-CoE-trainee-task
+
+* https://github.com/avito-tech/qa-trainee-task (представлена лишь задача №1)
+
 
 # Задача №1
 
