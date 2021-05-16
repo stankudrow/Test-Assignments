@@ -1,11 +1,12 @@
-# Test-Tasks
+# Test-Assignments
 
-Test tasks - descriptions and solutions - from different areas of IT that can be used in job interviews.
+Job interview test assignments with (possible) solutions.
 
 
 # Disclaimer
 
-Some of the assignments may or have been used by companies as test assignments. In this repository, only those tasks are published:
+Some of the assignments may or might have been used by companies as test assignments in their interviewings.
+In this repository, only those tasks are published:
 
 1) that were taken from open sources;
 
