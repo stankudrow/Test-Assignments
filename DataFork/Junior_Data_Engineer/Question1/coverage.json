@@ -1,0 +1,114 @@
+{
+    "meta": {
+        "version": "5.5",
+        "timestamp": "2021-05-21T19:48:45.073623",
+        "branch_coverage": true,
+        "show_contexts": false
+    },
+    "files": {
+        "question1.py": {
+            "executed_lines": [
+                3,
+                35,
+                38,
+                39,
+                42,
+                43,
+                44,
+                45,
+                46,
+                48,
+                49,
+                50,
+                51,
+                52,
+                55,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                84,
+                85,
+                86,
+                87,
+                88,
+                89,
+                90,
+                91,
+                92,
+                95
+            ],
+            "summary": {
+                "covered_lines": 35,
+                "num_statements": 41,
+                "percent_covered": 81.53846153846153,
+                "missing_lines": 6,
+                "excluded_lines": 0,
+                "num_branches": 24,
+                "num_partial_branches": 2,
+                "covered_branches": 18,
+                "missing_branches": 6
+            },
+            "missing_lines": [
+                107,
+                108,
+                109,
+                110,
+                111,
+                112
+            ],
+            "excluded_lines": []
+        },
+        "test_question1.py": {
+            "executed_lines": [
+                3,
+                6,
+                9,
+                11,
+                14,
+                15,
+                33,
+                36,
+                47,
+                65,
+                68,
+                72,
+                90,
+                93,
+                106,
+                124
+            ],
+            "summary": {
+                "covered_lines": 16,
+                "num_statements": 16,
+                "percent_covered": 100.0,
+                "missing_lines": 0,
+                "excluded_lines": 0,
+                "num_branches": 0,
+                "num_partial_branches": 0,
+                "covered_branches": 0,
+                "missing_branches": 0
+            },
+            "missing_lines": [],
+            "excluded_lines": []
+        }
+    },
+    "totals": {
+        "covered_lines": 51,
+        "num_statements": 57,
+        "percent_covered": 85.18518518518519,
+        "missing_lines": 6,
+        "excluded_lines": 0,
+        "num_branches": 24,
+        "num_partial_branches": 2,
+        "covered_branches": 18,
+        "missing_branches": 6
+    }
+}
