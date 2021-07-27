@@ -31,10 +31,10 @@ def parse_config_file(config_file: str) -> List[Tuple[Path, Path]]:
     """
     cppaths = []
     root = ET.parse(Path(config_file)).getroot()
-    for tag in root.findall('file'):
-        fname = tag.get('file_name')
-        src = Path(tag.get('source_path')).absolute() / fname
-        dst = Path(tag.get('destination_path')).absolute() / fname
+    for tag in root.findall("file"):
+        fname = tag.get("file_name")
+        src = Path(tag.get("source_path")).absolute() / fname
+        dst = Path(tag.get("destination_path")).absolute() / fname
         cppaths.append((src, dst))
     return cppaths
 
@@ -51,9 +51,10 @@ def parse_config_file(config_file: str) -> List[Tuple[Path, Path]]:
 
 # OSErrno 13 is possible if permission denied.
 
+
 def main():
     """Entry point."""
-    cppaths = parse_config_file('./task1.xml')
+    cppaths = parse_config_file("./task1.xml")
     for cppath in cppaths:
         src = cppath[0]
         dst = cppath[1]
@@ -64,5 +65,5 @@ def main():
                 copy(src, dst)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
