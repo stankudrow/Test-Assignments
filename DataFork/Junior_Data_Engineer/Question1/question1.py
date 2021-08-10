@@ -42,10 +42,12 @@ from typing import List
 @dataclass
 class Tanker:
     """Tanker with capacity and amount of water in it."""
+
     capacity: float
     water: float
 
     def __post_init__(self):
+        """Check the capacity and water boundaries."""
         if not 1 <= self.capacity <= 10e5:
             raise ValueError("incorrect capacity")
         if not 0 <= self.water <= self.capacity:
@@ -68,27 +70,27 @@ def solve(capacities: List, waters: List) -> int:
         the minimum number of tankers to hold the total amount of water.
 
     """
-    tankers: List = [Tanker(cap, wat) for cap, wat in zip(capacities, waters) if wat]
+    tankers = [Tanker(cap, wat) for cap, wat in zip(capacities, waters) if wat]
     tankers = sorted(tankers, key=lambda tanker: tanker.capacity)
-    transfert: List = []
+    transfert = []
     while tankers:
         icur: int = 0  # current tanker index
-        inxt = icur + 1
-        leng: int = len(tankers)
-        while (tankers[icur].capacity > tankers[icur].water) and (inxt < leng):
-            water_to_get = tankers[icur].capacity - tankers[icur].water
+        inxt = icur + 1  # next index
+        tlen = len(tankers)  # amount of tankers left for processing
+        while (tankers[icur].capacity > tankers[icur].water) and (inxt < tlen):
+            curwater = tankers[icur].capacity - tankers[icur].water
             nxtwater = tankers[inxt].water
             water_to_take = (
-                nxtwater if nxtwater <= water_to_get else nxtwater - water_to_get
+                nxtwater if nxtwater <= curwater else nxtwater - curwater
             )
             if water_to_take:
-                tankers[icur].water += water_to_take
-                tankers[inxt].water -= water_to_take
+                tankers[icur].water += water_to_take  # current in
+                tankers[inxt].water -= water_to_take  # next out
             inxt += 1
         if tankers[icur].water:
             transfert.append(tankers[icur])
             tankers.pop(icur)
-        tankers = [tanker for tanker in tankers if tanker.water]
+        tankers = [tanker for tanker in tankers if tanker.water]  # empties out
     return len(transfert)
 
 
@@ -106,11 +108,10 @@ def main() -> int:
     """
     print("Please enter the capacities of tankers: C1 C2 C3 etc.")
     capacities = [int(cap) for cap in input().split()]
-    print()
-    print("Please enter the amount of water in tankers: W1 W2 W3 etc.")
+    print("\nPlease enter the amount of water in tankers: W1 W2 W3 etc.")
     waters = [int(wat) for wat in input().split()]
     return solve(capacities, waters)
 
 
-# if __name__ == '__main__':
-#    print(main())
+if __name__ == '__main__':
+    print(main())
