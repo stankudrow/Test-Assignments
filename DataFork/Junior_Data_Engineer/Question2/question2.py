@@ -11,15 +11,19 @@ M persons come to the fair and each visits shops in the [L, R] inclusively.
 Determine the three most popular shops.
 The task is to fix the code, not to rewrite it.
 
+Notes
+-----
+The code was rewritten, the input changed to accept data as for a single test.
+
 
 Constraints
 -----------
 
-* 1 <= N <= 10
+1st line: the number of shops: 1 <= N <= 10e5
 
-* 3 <= N, M <= 10e5
+2nd line: the number of vistors: 1 <= M <= 10e5
 
-* 1 <= L <= R <= N
+3d line:  the ranges of visited shops for each visitor:  1 <= L <= R <= N
 
 
 Examples
@@ -47,40 +51,75 @@ Output:
 
 """
 
-# According to the module docstring, the results of the example are:
-#     shop : visited
-#     1    : 1
-#     2    : 2
-#     3    : 3
-#     4    : 3
-#     5    : 4
-#     6    : 3
-# So the result of the solve function is not totally correct.
 
 __author__ = "Stanislav D. Kudriavtsev"
 
 
-# I could not help myself not to rewrite the code.
+from operator import itemgetter
+from typing import List, Tuple
 
 
 # pylint: disable=unused-argument
-def solve(shops, visitors, shop_ranges):
+
+
+def check_shops(shops: int):
+    """Check if 1 <= shops <= 10e5."""
+    if not 1 <= shops <= 10e5:
+        raise ValueError("shops (={shops}) value is out of range")
+
+
+def check_visitors(visitors: int):
+    """Check if 1 <= visitors <= 10e5."""
+    if not 1 <= visitors <= 10e5:
+        raise ValueError("visitors (={visitors}) value is out of range")
+
+
+def check_range(shops: int, left: int, right: int):
+    """Check if the shop range is in 1 <= left <= right <= shops."""
+    check_shops(shops)
+    if not 1 <= left <= right <= shops:
+        raise ValueError(f"range({left}, {right}) is invalid")
+
+
+def check_bounds(shops: int, visitors: int, ranges: List[Tuple[int, int]]):
+    """Check shops, visitors, ranges and if len(ranges) == visitors."""
+    check_shops(shops)
+    check_visitors(visitors)
+    nrange = 0
+    for left, right in ranges:
+        check_range(shops, left, right)
+        nrange += 1
+    if nrange != visitors:
+        raise ValueError("(len(ranges) = {nrange}) != (visitors = {visitors})")
+
+
+def solve(shops: int, visitors: int, ranges: List[Tuple[int, int]]) -> List:
     """Select three most popular shops."""
-    # fix bugs in this function
-    shops = {}.fromkeys(range(1, shops + 1), 0)
-    for shrange in shop_ranges:
-        left, right = shrange  # EAFP
+    check_bounds(shops, visitors, ranges)
+    shop_ranges = {}.fromkeys(range(1, shops + 1), 0)
+    for _range in ranges:
+        left, right = _range  # EAFP
         for shop in range(left, right + 1):
-            shops[shop] += 1  # EAFP
-    return sorted(shops, key=shops.get, reverse=True)[:3]
+            shop_ranges[shop] += 1  # EAFP
+    return sorted(shop_ranges, key=shop_ranges.get, reverse=True)[:3]
 
 
 def main():
     """Entry point."""
-    # a little refactoring here
-    test_cases = int(input())
-    for _ in range(test_cases):
-        shops, visitors = map(int, input().split())
-        shop_ranges = [tuple(map(int, input().split())) for _ in range(visitors)]
-        result = solve(shops, visitors, shop_ranges)
-        print(f'\nResult: {" ".join(map(str, result))}\n')
+    shops = int(input("The number of shops (N): "))
+    check_shops(shops)
+    visitors = int(input("The number of visitors (M): "))
+    check_visitors(visitors)
+    ranges = []
+    for visitor in range(visitors):
+        print(f"\nThe visitor {visitor} range:")
+        left = int(input("L = "))
+        right = int(input("R = "))
+        check_range(shops, left, right)
+        ranges.append((left, right))
+    result = solve(shops, visitors, ranges)
+    print(f'\nResult: {" ".join(map(str, result))}')
+
+
+if __name__ == "__main__":
+    main()

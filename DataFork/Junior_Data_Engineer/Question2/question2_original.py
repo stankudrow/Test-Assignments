@@ -73,7 +73,7 @@ def solve(N, M, visit):
 T = int(input())
 for _ in range(T):
     N, M = map(int, input().split())
-    visit = [list(map(int, input().split()) for i in range(M)]
+    visit = [list(map(int, input().split())) for i in range(M)]
     
     out_ = solve(N, M, visit)
     print (' '.join(map(str, out_)))
