@@ -62,31 +62,43 @@ def solve(start: Point, func: Callable[[Point], bool]) -> Dict[Point, bool]:
 
     """
 
-    def move(point: Point) -> None:
+    def move(start: Point, dx: Point, dy: Point) -> int:
         """Travel across the grid until it is possible."""
-        if not points.get(point):
-            flag = func(point)
-            if flag:
-                points[point] = True
-                move(point + Point(0, 1))  # move upwards
-                move(point + Point(1, 0))  # move rightwards
 
-    points: Dict[Point, str] = {}
+        def travel(point: Point, dx: Point, dy: Point) -> None:
+            """Travel across the quadrant by moving towards dx and dy."""
+            is_visited: Optional[bool] = vpoints.get(point)
+            if is_visited is None:
+                status = func(point)
+                vpoints[point] = status
+                if status:
+                    travel(point + dx, dx, dy)
+                    travel(point + dy, dx, dy)
+
+        vpoints: Dict[Point, str] = {}  # visited points
+        travel(start, dx, dy)
+        vpoints = {pnt: stat for pnt, stat in vpoints.items() if stat}
+        print(f'points:\n{vpoints}')
+        return len(vpoints)
+
     start.dim = 2  # since non 2D point may be passed in
-    move(start)
-    return points
+    total = 0
+    total += move(start, Point(1, 0), Point(0, 1))                  # UR
+    total += move(start - Point(0, 1), Point(1, 0), -Point(0, 1))   # RD
+    total += move(start - Point(1, 0), -Point(0, 1), -Point(1, 0))  # DL
+    total += move(start + Point(-1, 1), Point(0, 1), -Point(1, 0))  # UL
+    return total
+    #return {point: status for point, status in points.items() if status}
 
 
 def main():
     """Entry point."""
     xcoord = int(input("int(x) = "))
     ycoord = int(input("int(y) = "))
-    weight = int(input('int(weight) = '))
-    points = solve(Point(xcoord, ycoord), check_point(weight))
-    # print(f'\npoints = {points}\n')
-    total = len(points)
-    if total:
-        total = 4 * total - 3  # avoid triple counting of original valid point
+    weight = int(input('int(w) = '))  # distance weight, see check_weight
+    start = Point(xcoord, ycoord)
+    print(f'\nstart = {start}')
+    total = solve(start, check_point(weight))
     print(f'total = {total}')
 
 

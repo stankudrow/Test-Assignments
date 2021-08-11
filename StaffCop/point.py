@@ -79,10 +79,10 @@ class Point:
         return self * factor
 
     def __repr__(self) -> str:
-        return repr(self.coords)
+        return f'Point{repr(tuple(self.coords))}'
 
     def __str__(self) -> str:
-        return str(self.coords)
+        return repr(self)
 
     def __sub__(self, other):
         return self + (-other)  # __neg__
