@@ -58,8 +58,6 @@ def main():
     for cppath in cppaths:
         src = cppath[0]
         dst = cppath[1]
-        print(src)
-        print(src.exists())
         if src.exists() and src.is_file():
             if dst.parent.exists():
                 copy(src, dst)

@@ -16,7 +16,8 @@ from typing import Union
 PathType = Union[str, Path]
 
 
-def hash_file(path: PathType, algo: str, enc: str = "utf-8", bsize: int = 65536) -> str:
+def hash_file(path: PathType, algo: str,
+              enc: str = "utf-8", bsize: int = 65536) -> str:
     """
     Hash the name and contents of a file.
 

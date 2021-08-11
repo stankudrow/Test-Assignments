@@ -50,25 +50,27 @@ def parse_infile(filepath: PathType) -> List[HashRecord]:
     return list(records.values())
 
 
-def check_files(records: Iterable[HashRecord], dirpath: PathType) -> Dict[str, str]:
+def check_files(records: Iterable[HashRecord],
+                dirpath: PathType) -> Dict[str, str]:
     """
     Check files integrity at dirpath comparing with data from records.
 
     Parameters
     ----------
     records : Iterable[HashRecord]
-        DESCRIPTION.
+        (filename, hash_algo, hash_sum).
     dirpath : PathType
-        DESCRIPTION.
+        the directory with files to check.
 
     Returns
     -------
     Dict[str, str]
-        DESCRIPTION.
+        {filename: status}.
 
     """
     dpath = Path(dirpath)
-    stats = {entry.name: object for entry in dpath.iterdir() if entry.is_file()}
+    stats = {entry.name: object for entry in dpath.iterdir()
+             if entry.is_file()}
     for record in records:
         rec_fname = record.filename
         sts_fname = stats.get(rec_fname)
