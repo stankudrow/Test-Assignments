@@ -4,16 +4,12 @@
 
 
 from functools import total_ordering
-from numbers import Real  # ???? mypy !!!!!
+from numbers import Real
 from typing import Iterable, List, Optional, Tuple
 
 
 # The sympy package contains Point2D class.
 # Here the Point2D is "remade" for an illustrative purpose.
-
-
-# pylint: disable=line-too-long
-# pydocstyle: ignore=D105
 
 
 @total_ordering
@@ -24,7 +20,7 @@ class Point:
 
     @classmethod
     def from_iterable(
-        cls, iterable: Iterable[Real], dim: Optional[int] = None
+        cls, iterable: Iterable, dim: Optional[int] = None
     ) -> "Point":
         """
         Create a point from iterable.
@@ -32,7 +28,7 @@ class Point:
         Parameters
         ----------
         cls : Point
-        iterable : Iterable[Real]
+        iterable : Iterable
 
         Returns
         -------
@@ -41,8 +37,8 @@ class Point:
         """
         return Point(*iterable, dim=dim)
 
-    def __init__(self, *args: Tuple[Real, ...], dim: Optional[int] = None):
-        self.coords = args
+    def __init__(self, *args, dim: Optional[int] = None):
+        self.coords: Tuple = args
         if dim is not None:
             self.dim = dim
 
@@ -57,7 +53,7 @@ class Point:
         return self.coords == other
 
     def __hash__(self) -> int:
-        return hash(tuple(self.coords))
+        return hash(self.coords)
 
     def __iter__(self):
         for coord in self.coords:
@@ -66,16 +62,17 @@ class Point:
     def __lt__(self, other):
         return self.coords < other
 
-    def __mul__(self, factor: Real):
-        if not isinstance(factor, Real):
-            raise TypeError("factor must be a real number")
+    def __mul__(self, factor):
         new_coords = [sitem * factor for sitem in self]
         return self.from_iterable(new_coords)
+
+    def __ne__(self, other) -> bool:
+        return not (self == other)
 
     def __neg__(self):
         return -1 * self
 
-    def __rmul__(self, factor: Real):
+    def __rmul__(self, factor):
         return self * factor
 
     def __repr__(self) -> str:
@@ -85,29 +82,29 @@ class Point:
         return repr(self)
 
     def __sub__(self, other):
-        return self + (-other)  # __neg__
+        return self + (-other)
 
     @property
-    def coords(self) -> List[Real]:
+    def coords(self) -> Tuple:
         """
         Return the coordinates of the point.
 
         Returns
         -------
-        List[Real]
+        Tuple
 
         """
         return self._coords
 
     @coords.setter
-    def coords(self, iterable: Iterable[Real]):
-        coords = []  # in case of generator/iterator passed in
+    def coords(self, iterable: Iterable):
+        coords: List = []  # in case of generator/iterator passed in
         idim = 0
         for idim, item in enumerate(iterable, 1):
             if not isinstance(item, Real):
-                raise TypeError(f"iterable[{idim}] == {item} is not of Real type")
+                raise TypeError(f"iterable[{idim}] == {item} is not Real")
             coords.append(item)
-        self._coords = coords[:idim]
+        self._coords = tuple(coords[:idim])
         self._dim = idim
 
     @property

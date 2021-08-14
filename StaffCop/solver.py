@@ -3,7 +3,7 @@
 """StaffCop Test Assignment."""
 
 
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional
 
 from point import Point
 
@@ -24,7 +24,7 @@ def sum_digits(num: int) -> int:
     return sum(map(int, str(abs(num))))  # in case of negative numbers
 
 
-def check_point(weight: int) -> bool:
+def check_point(weight: int) -> Callable[[Point], bool]:
     """
     Check the point according to the distance weight.
 
@@ -34,7 +34,7 @@ def check_point(weight: int) -> bool:
 
     Returns
     -------
-    bool
+    Callable[[Point], bool]
 
     """
 
@@ -44,7 +44,7 @@ def check_point(weight: int) -> bool:
     return wrapper
 
 
-def solve(start: Point, func: Callable[[Point], bool]) -> Dict[Point, bool]:
+def solve(start: Point, func: Callable[[Point], bool]) -> int:
     """
     Travel across the grid of 2D points from start while func is True.
 
@@ -75,10 +75,10 @@ def solve(start: Point, func: Callable[[Point], bool]) -> Dict[Point, bool]:
                     travel(point + dx, dx, dy)
                     travel(point + dy, dx, dy)
 
-        vpoints: Dict[Point, str] = {}  # visited points
+        vpoints: Dict[Point, bool] = {}  # visited points
         travel(start, dx, dy)
         vpoints = {pnt: stat for pnt, stat in vpoints.items() if stat}
-        print(f'points:\n{vpoints}')
+        print(f'\npoints:\n{vpoints}\n')
         return len(vpoints)
 
     start.dim = 2  # since non 2D point may be passed in
@@ -88,14 +88,13 @@ def solve(start: Point, func: Callable[[Point], bool]) -> Dict[Point, bool]:
     total += move(start - Point(1, 0), -Point(0, 1), -Point(1, 0))  # DL
     total += move(start + Point(-1, 1), Point(0, 1), -Point(1, 0))  # UL
     return total
-    #return {point: status for point, status in points.items() if status}
 
 
 def main():
     """Entry point."""
     xcoord = int(input("int(x) = "))
     ycoord = int(input("int(y) = "))
-    weight = int(input('int(w) = '))  # distance weight, see check_weight
+    weight = int(input('int(w) = '))  # distance weight
     start = Point(xcoord, ycoord)
     print(f'\nstart = {start}')
     total = solve(start, check_point(weight))
