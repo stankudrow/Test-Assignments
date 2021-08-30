@@ -5,12 +5,21 @@
 
 import xml.etree.ElementTree as ET
 
+from dataclasses import dataclass
 from pathlib import Path
 from shutil import copy
-from typing import List, Tuple
+from typing import List
 
 
-def parse_config_file(config_file: str) -> List[Tuple[Path, Path]]:
+@dataclass
+class SDF:
+    """Source Destination Filename dataclass."""
+
+    src: Path
+    dst: Path
+
+
+def parse_config_file(config_file: str) -> List[SDF]:
     """
     Parse XML config file with data for copying files.
 
@@ -26,24 +35,18 @@ def parse_config_file(config_file: str) -> List[Tuple[Path, Path]]:
 
     Returns
     -------
-    List[Tuple[Path, Path]]
-        (src, dst)
+    List[SDF]
+
     """
     cppaths = []
     root = ET.parse(Path(config_file)).getroot()
     for tag in root.findall("file"):
         fname = tag.get("file_name")
-        src = Path(tag.get("source_path")).absolute() / fname
-        dst = Path(tag.get("destination_path")).absolute() / fname
-        cppaths.append((src, dst))
+        src = Path(tag.get("source_path")).resolve() / fname
+        dst = Path(tag.get("destination_path")).resolve() / fname
+        cppaths.append(SDF(src, dst))
     return cppaths
 
-
-# Note.
-# It was possible to create SrcDest class with:
-#     * dataclass (from dataclasses)
-#     * namedtuple (from collections)
-# However, the task is simpler, no need to bring complications.
 
 # Concerning copy method, shutil contains copyfile and copy2 as well
 # The `copy` function copies not only the content of a file,
@@ -56,8 +59,8 @@ def main():
     """Entry point."""
     cppaths = parse_config_file("./task1.xml")
     for cppath in cppaths:
-        src = cppath[0]
-        dst = cppath[1]
+        src = cppath.src
+        dst = cppath.dst
         if src.exists() and src.is_file():
             if dst.parent.exists():
                 copy(src, dst)

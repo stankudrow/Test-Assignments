@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Veeam Software Test Assignment 2. - CLI module."""
+"""Veeam Software Test Assignment 2: CLI."""
 
+
+from typing import Dict
 
 import click
 
 import task2
-
-from typing import Dict
 
 
 @click.command()
 @click.option("-f", "--file", nargs=1, type=str, default=None, show_default=True)
 @click.argument("infile", nargs=1)
 @click.argument("dirpath", nargs=1)
-def cli(infile, dirpath, file) -> Dict[str, str]:
+def cli(infile, dirpath, file):
     """
     Check files integrity at dirpath comparing with data from infile.
 
@@ -31,7 +31,7 @@ def cli(infile, dirpath, file) -> Dict[str, str]:
 
     Returns
     -------
-    Dict[str, str]
+    str
         files-statuses.
 
     """
@@ -39,8 +39,10 @@ def cli(infile, dirpath, file) -> Dict[str, str]:
     stats = task2.check_files(data, dirpath)
     resstr = get_files_stats(stats)
     if file is not None:
-        file = open(file, "w")
-    click.echo(message=resstr, file=file)
+        with open(file, "w") as inf:
+            click.echo(message=resstr, file=inf)
+    else:
+        click.echo(message=resstr)
 
 
 def get_files_stats(fstats: Dict[str, str]) -> str:
@@ -61,6 +63,9 @@ def get_files_stats(fstats: Dict[str, str]) -> str:
     for fname in sorted(fstats):
         res += f"{fname} {fstats[fname]}\n"
     return res
+
+
+# pylint: disable=no-value-for-parameter
 
 
 if __name__ == "__main__":

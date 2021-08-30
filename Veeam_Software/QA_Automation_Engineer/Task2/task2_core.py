@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Veeam Software Test Assignment 2.
-
-Module with hash function(s).
-"""
+"""Veeam Software Test Assignment 2: hash functions"""
 
 
 import hashlib
@@ -16,39 +12,33 @@ from typing import Union
 PathType = Union[str, Path]
 
 
-def hash_file(path: PathType, algo: str,
-              enc: str = "utf-8", bsize: int = 65536) -> str:
+def hash_file(path: PathType, algo: str, enc: str = "utf-8", bsize: int = 65536) -> str:
     """
     Hash the name and contents of a file.
 
     Parameters
     ----------
-    path : Union[str, Path]
+    path : PathType
+        file to hash.
     algo : str
-        hash algorithm from PyStd hashlib library.
-    encoding : str, optional
-        encoding before hashing. The default is 'utf-8'.
+        hash algorithm name supported by haslib Python module.
+    enc : str, optional
+        string encoding. The default is "utf-8".
     bsize : int, optional
-        buffer/block size. The default is 65536.
-
-    Raises
-    ------
-    FileNotFoundError
-        filepath does not exist or not a file.
+        buffer/block size to read. The default is 65536.
 
     Returns
     -------
     str
+        DESCRIPTION.
 
     """
     path = Path(path)
-    if not path.is_file():
-        raise FileNotFoundError(path)
-    algo = getattr(hashlib, algo)()
-    algo.update(path.name.encode(enc))
     with open(path, encoding=enc) as inf:
+        hashalgo = getattr(hashlib, algo)()
+        hashalgo.update(path.name.encode(enc))
         buffer = inf.read(bsize)
         while len(buffer) > 0:
-            algo.update(buffer.encode(enc))
+            hashalgo.update(buffer.encode(enc))
             buffer = inf.read(bsize)
-    return algo.hexdigest()
+    return hashalgo.hexdigest()

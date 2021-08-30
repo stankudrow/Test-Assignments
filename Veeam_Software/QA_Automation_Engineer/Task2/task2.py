@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Veeam Software Test Assignment 2.
-
-Module containing program main logic.
-"""
+"""Veeam Software Test Assignment 2."""
 
 
 from dataclasses import dataclass
@@ -18,19 +14,17 @@ PathType = Union[str, Path]
 
 
 @dataclass
-class HashRecord:
-    """Filename Hash_algorithm Hash_sum record."""
+class FAS:
+    """FileName HashAlgorithm HashSum dataclass."""
 
     filename: str
-    algo: str
-    hash: str
+    hashalgo: str
+    hashsum: str
 
 
-def parse_infile(filepath: PathType) -> List[HashRecord]:
+def parse_infile(filepath: PathType) -> List[FAS]:
     """
-    Parse input file with files to check.
-
-    Each significant line contains `filename hash_algorithm hash_sum`.
+    Parse input file with `filename hash_algorithm hash_sum` lines.
 
     Parameters
     ----------
@@ -38,26 +32,25 @@ def parse_infile(filepath: PathType) -> List[HashRecord]:
 
     Returns
     -------
-    Dict[str, HashRecord]
+    List[FAS]
 
     """
     records = {}
     with open(filepath) as infile:
         for line in infile:
-            line = line.split()
-            if len(line) == 3:
-                records[line[0]] = HashRecord(*line)  # test it!!!
+            line_spl = line.split()
+            if len(line_spl) == 3:
+                records[line_spl[0]] = FAS(*line_spl)
     return list(records.values())
 
 
-def check_files(records: Iterable[HashRecord],
-                dirpath: PathType) -> Dict[str, str]:
+def check_files(records: Iterable[FAS], dirpath: PathType) -> Dict[str, str]:
     """
     Check files integrity at dirpath comparing with data from records.
 
     Parameters
     ----------
-    records : Iterable[HashRecord]
+    records : Iterable[FAS]
         (filename, hash_algo, hash_sum).
     dirpath : PathType
         the directory with files to check.
@@ -69,16 +62,15 @@ def check_files(records: Iterable[HashRecord],
 
     """
     dpath = Path(dirpath)
-    stats = {entry.name: object for entry in dpath.iterdir()
-             if entry.is_file()}
+    stats = {entry.name: "" for entry in dpath.iterdir() if entry.is_file()}
     for record in records:
         rec_fname = record.filename
         sts_fname = stats.get(rec_fname)
         if sts_fname is None:
             stats[rec_fname] = "NOT FOUND"
         else:
-            sts_fhash = hash_file(dpath / rec_fname, record.algo)
-            if sts_fhash == record.hash:
+            sts_fhash = hash_file(dpath / rec_fname, record.hashalgo)
+            if sts_fhash == record.hashsum:
                 stats[rec_fname] = "OK"
             else:
                 stats[rec_fname] = "FAIL"
@@ -87,5 +79,5 @@ def check_files(records: Iterable[HashRecord],
 
 # unnecessary
 if __name__ == "__main__":
-    records = parse_infile("task2_input.txt")
-    print(check_files(records, "outfiles"))
+    fas_records = parse_infile("task2_input.txt")
+    print(check_files(fas_records, "outfiles"))
