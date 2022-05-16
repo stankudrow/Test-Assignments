@@ -1,10 +1,10 @@
 from collections import Counter
 from functools import reduce
 from sys import argv
-from typing import Sequence
+from typing import Iterable
 
 
-def get_shortest_reduce(nums: Sequence[int]) -> int:
+def get_shortest_reduce(nums: Iterable[int]) -> int:
     if not nums:
         return 0
     cnt = Counter(nums)
